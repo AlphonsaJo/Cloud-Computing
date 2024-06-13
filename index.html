@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Regression Predictor</title>
+</head>
+<body>
+    <h1>Linear Regression Predictor</h1>
+    <form id="prediction-form" method="POST" action="/predict">
+        <label for="cpu_usage">CPU Usage:</label>
+        <input type="number" step="0.01" name="cpu_usage" required><br><br>
+        <label for="memory_usage">Memory Usage:</label>
+        <input type="number" step="0.01" name="memory_usage" required><br><br>
+        <label for="network_traffic">Network Traffic:</label>
+        <input type="number" step="0.01" name="network_traffic" required><br><br>
+        <label for="power_consumption">Power Consumption:</label>
+        <input type="number" step="0.01" name="power_consumption" required><br><br>
+        <label for="num_executed_instructions">Num Executed Instructions:</label>
+        <input type="number" step="0.01" name="num_executed_instructions" required><br><br>
+        <label for="execution_time">Execution Time:</label>
+        <input type="number" step="0.01" name="execution_time" required><br><br>
+        <button type="submit">Predict</button>
+    </form>
+    <div id="prediction-result"></div>
+
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('prediction-result').innerText = 'Predicted Energy Efficiency: ' + data.prediction.toFixed(2);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
